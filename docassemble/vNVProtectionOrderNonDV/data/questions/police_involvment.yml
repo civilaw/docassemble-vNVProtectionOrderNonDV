@@ -1,0 +1,49 @@
+question: Police Involvment Information
+subquestion: |
+  <div class='help'>
+  Please provide any information about police involvment concerning to the event(s) listed on the previous page.  </div>
+fields:
+  - no label: police_involvment
+    required: False
+    show if: show_hidden
+  - Have the police been informed of any event(s), past or most recent?: incident.did_police_come
+    input type: radio
+    choices:
+      - Yes: True
+      - No: False   
+  - Was anyone arrested?: incident.anyone_arrested
+    input type: radio
+    choices:
+      - Yes: True
+      - No: False 
+    show if:
+      variable: incident.did_police_come
+      is: True            
+  - Who was arrested?: incident.who_arrested
+    datatype: checkboxes
+    choices:
+      - ${firstParty.name}: firstparty
+      - ${adverseParty.name}: secondparty
+      - Other: other  
+    none of the above: False
+    show if:
+      variable: incident.anyone_arrested
+      is: True
+  - Enter the name of the person who was arrested: incident.name_who_arrested
+    label above field: True
+    js show if : |
+      val("incident.who_arrested['other']") == true        
+  - note: |
+      <div class="alert alert-danger">
+      <p><i class="fa fa-exclamation-circle" aria-hidden="true"></i> Important</p>When you are ready to file your petition, you may include a copy of the police/incident report.</div>       
+    show if:
+     variable: incident.did_police_come
+     is: True      
+ # - "Please upload a copy of the police/incident report.": incident.reports
+ #   required: False
+ #   datatype: file 
+ #   label above field: False 
+ #   show if:
+  #    variable: incident.did_police_come
+ #     is: True     
+section: police_involvment_nav

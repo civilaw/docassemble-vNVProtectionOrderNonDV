@@ -1,0 +1,614 @@
+question: Temporary Protections Requested / Protected Locations
+subquestion: |
+  <div class='help'>
+  The next sections will ask what kind of protection you need from the other person. This could include addresses that they should stay away from, and whether either of you needs to pick up personal belongings from the other's residence.
+     </div>
+fields:
+  - What locations should the adverse party stay away from?: locations
+    datatype: checkboxes
+    choices:  
+      - My residence : residence
+      - My work: work
+      - My school or the children's school: school
+      - Other locations I visit regularly: other  
+    label above field: False
+    none of the above: False      
+section: temporary_protections_requested_nav
+---    
+question: Temporary Protections Requested / Protected Locations
+subquestion: |
+   <div class="alert alert-warning">
+   <p><i class="fa fa-exclamation-circle" aria-hidden="true"></i> Important</p>
+    The adverse party should stay away from your current residence. </div>
+fields:
+  - no label: temporary_protection_current_address
+    required: False
+    show if: show_hidden
+  - Do you and the adverse party live together now?: temporary_protection.is_live_together
+    label above field: True
+    input type: radio
+    choices:
+      - Yes: True
+      - No: False
+  - Whose name is listed on the lease/title? : temporary_protection.name_on_lease
+    show if:
+      variable: temporary_protection.is_live_together
+      is: True
+  - When did you start living together?:   temporary_protection.date_living_together 
+    show if:
+      variable: temporary_protection.is_live_together
+      is: True
+
+  - Does the adverse party know where you live now?: temporary_protection.adverse_know_current_address
+    label above field: True
+    input type: radio
+    choices:
+      - Yes: True
+      - No: False
+    show if:
+      variable: temporary_protection.is_live_together
+      is: False   
+
+  - Would you like to keep your address confidential so the adverse party does not know where you are staying? : temporary_protection.is_address_confidential
+    input type: radio
+    label above field: True
+    choices:
+      - Yes: True
+      - No: False
+    show if:
+      variable: temporary_protection.adverse_know_current_address
+      is: False  
+         
+  - Do you and the adverse party live in the same complex/property/trailer park?: temporary_protection.is_live_in_same_complex
+    label above field: True
+    input type: radio
+    choices:
+      - Yes: True
+      - No: False
+    js show if: |
+      val("temporary_protection.is_live_together") == false && val("temporary_protection.adverse_know_current_address") == true
+
+  - Should the adverse party stay away from the entire complex/property/trailer park?: temporary_protection.should_adverse_stay_away_from_complex
+    label above field: True
+    input type: radio
+    choices:
+      - Yes: True
+      - No: False
+    show if:
+      variable: temporary_protection.is_live_in_same_complex
+      is: False 
+  - Please explain the distance and need for protection in that complex/property/trailer park.: temporary_protection.description_distance_and_need_for_protection
+    label above field: True
+    show if:
+      variable: temporary_protection.is_live_in_same_complex
+      is: True     
+      
+section: temporary_protections_requested_nav
+---
+question: Temporary Protections Requested / Protected Locations
+subquestion: |
+   <div class="alert alert-warning">
+   <p><i class="fa fa-exclamation-circle" aria-hidden="true"></i> Important</p>
+    The adverse party should stay away from your workplace.</div>
+fields:
+  - no label: temporary_protection_work
+    required: False
+    show if: show_hidden   
+  - Is your work address confidential? : temporary_protection.is_work_address_confidential
+    input type: radio
+    choices:
+      - Yes: True
+      - No: False 
+  - Employer/Location Name: firstParty.employer_name
+    show if:
+      variable: temporary_protection.is_work_address_confidential
+      is: False 
+  - County: firstParty.working_address.county
+    code : |
+        get_counties_dict()
+    show if:
+      variable: temporary_protection.is_work_address_confidential
+      is: False  
+  - Street Address: firstParty.working_address.address
+    label above field: True
+    show if:
+      variable: temporary_protection.is_work_address_confidential
+      is: False
+  - City: firstParty.working_address.city
+    label above field: True
+    show if:
+      variable: temporary_protection.is_work_address_confidential
+      is: False
+  - State: firstParty.working_address.state
+    datatype: dropdown
+    default: NV
+    choices:
+      code: states
+    label above field: True
+    show if:
+      variable: temporary_protection.is_work_address_confidential
+      is: False
+  - Zip: firstParty.working_address.zip_code
+    label above field: True
+    maxlength: 5
+    minlength: 5
+    datatype: integer
+    show if:
+      variable: temporary_protection.is_work_address_confidential
+      is: False  
+  - Is there another workplace the adverse party should stay away from? : temporary_protection.second_work_address
+    input type: radio
+    label above field: True
+    choices:
+      - Yes: True
+      - No: False 
+    show if:
+      variable: temporary_protection.is_work_address_confidential
+      is: False 
+  - Employer/Location Name: firstParty.second_employer_name
+    show if:
+      variable: temporary_protection.second_work_address
+      is: True 
+  - County: firstParty.second_working_address.county
+    code : |
+        get_counties_dict()
+    show if:
+      variable: temporary_protection.second_work_address
+      is: True  
+  - Street Address: firstParty.second_working_address.address
+    label above field: True
+    show if:
+      variable: temporary_protection.second_work_address
+      is: True
+  - City: firstParty.second_working_address.city
+    label above field: True
+    show if:
+      variable: temporary_protection.second_work_address
+      is: True
+  - State: firstParty.second_working_address.state
+    datatype: dropdown
+    default: NV
+    choices:
+      code: states
+    label above field: True
+    show if:
+      variable: temporary_protection.second_work_address
+      is: True
+  - Zip: firstParty.second_working_address.zip_code
+    label above field: True
+    maxlength: 5
+    minlength: 5
+    datatype: integer
+    show if:
+      variable: temporary_protection.second_work_address
+      is: True                    
+section: temporary_protections_requested_nav
+---
+question: Temporary Protections Requested / Protected Locations
+subquestion: |
+   <div class="alert alert-warning">
+   <p><i class="fa fa-exclamation-circle" aria-hidden="true"></i> Important</p>
+    The adverse party should stay away from your workplace.</div>
+fields:
+  - no label: temporary_protection_work_not_confidential
+    required: False
+    show if: show_hidden 
+  - Employer/Location Name: firstParty.employer_name 
+  - County: firstParty.working_address.county
+    code : |
+        get_counties_dict()
+  - Street Address: firstParty.working_address.address
+    label above field: True
+  - City: firstParty.working_address.city
+    label above field: True
+  - State: firstParty.working_address.state
+    datatype: dropdown
+    default: NV
+    choices:
+      code: states
+    label above field: True
+  - Zip: firstParty.working_address.zip_code
+    label above field: True
+    maxlength: 5
+    minlength: 5
+    datatype: integer 
+  - Would you like to add other addresses? : temporary_protection.second_work_address
+    input type: radio
+    choices:
+      - Yes: True
+      - No: False 
+  - Employer/Location Name: firstParty.second_employer_name
+    show if:
+      variable: temporary_protection.second_work_address
+      is: True 
+  - County: firstParty.second_working_address.county
+    code : |
+        get_counties_dict()
+    show if:
+      variable: temporary_protection.second_work_address
+      is: True  
+  - Street Address: firstParty.second_working_address.address
+    label above field: True
+    show if:
+      variable: temporary_protection.second_work_address
+      is: True
+  - City: firstParty.second_working_address.city
+    label above field: True
+    show if:
+      variable: temporary_protection.second_work_address
+      is: True
+  - State: firstParty.second_working_address.state
+    datatype: dropdown
+    default: NV
+    choices:
+      code: states
+    label above field: True
+    show if:
+      variable: temporary_protection.second_work_address
+      is: True
+  - Zip: firstParty.second_working_address.zip_code
+    label above field: True
+    maxlength: 5
+    minlength: 5
+    datatype: integer
+    show if:
+      variable: temporary_protection.second_work_address
+      is: True                    
+section: temporary_protections_requested_nav
+---
+question: Temporary Protections Requested / Protected Locations
+subquestion: |
+   <div class="alert alert-warning">
+   <p><i class="fa fa-exclamation-circle" aria-hidden="true"></i> Important</p>
+    The adverse party should stay away from your school and/or the child(ren)’s school/day care.  </div>
+fields:
+  - no label: temporary_protection_school
+    required: False
+    show if: show_hidden
+  - Is the school/daycare address confidential? : temporary_protection.is_school_address_confidential
+    input type: radio
+    choices:
+      - Yes: True
+      - No: False
+  - School/Daycare: firstParty.school_name
+    show if:
+      variable: temporary_protection.is_school_address_confidential
+      is: False 
+  - County: firstParty.school_address.county
+    code : |
+        get_counties_dict()
+    show if:
+      variable: temporary_protection.is_school_address_confidential
+      is: False  
+  - Street Address: firstParty.school_address.address
+    label above field: True
+    show if:
+      variable: temporary_protection.is_school_address_confidential
+      is: False
+  - City: firstParty.school_address.city
+    label above field: True
+    show if:
+      variable: temporary_protection.is_school_address_confidential
+      is: False
+  - State: firstParty.school_address.state
+    datatype: dropdown
+    default: NV
+    choices:
+      code: states
+    label above field: True
+    show if:
+      variable: temporary_protection.is_school_address_confidential
+      is: False
+  - Zip: firstParty.school_address.zip_code
+    label above field: True
+    maxlength: 5
+    minlength: 5
+    datatype: integer
+    show if:
+      variable: temporary_protection.is_school_address_confidential
+      is: False 
+  - Is there another school the adverse party should stay away from? : temporary_protection.second_school_address_confidential
+    input type: radio
+    choices:
+      - Yes: True
+      - No: False 
+    show if:
+      variable: temporary_protection.is_school_address_confidential
+      is: False  
+  - School/Daycare: firstParty.second_school_name
+    show if:
+      variable: temporary_protection.second_school_address_confidential
+      is: True 
+  - County: firstParty.second_school_address.county
+    code : |
+        get_counties_dict()
+    show if:
+      variable: temporary_protection.second_school_address_confidential
+      is: True  
+  - Street Address: firstParty.second_school_address.address
+    label above field: True
+    show if:
+      variable: temporary_protection.second_school_address_confidential
+      is: True
+  - City: firstParty.second_school_address.city
+    label above field: True
+    show if:
+      variable: temporary_protection.second_school_address_confidential
+      is: True
+  - State: firstParty.second_school_address.state
+    datatype: dropdown
+    default: NV
+    choices:
+      code: states
+    label above field: True
+    show if:
+      variable: temporary_protection.second_school_address_confidential
+      is: True
+  - Zip: firstParty.second_school_address.zip_code
+    label above field: True
+    maxlength: 5
+    minlength: 5
+    datatype: integer
+    show if:
+      variable: temporary_protection.second_school_address_confidential
+      is: True                   
+section: temporary_protections_requested_nav
+---
+question: Temporary Protections Requested / Protected Locations
+subquestion: |
+   <div class="alert alert-warning">
+   <p><i class="fa fa-exclamation-circle" aria-hidden="true"></i> Important</p>
+    The adverse party should stay away from the following places that you and/or the minor child(ren) go to regularly.</div>
+fields:
+  - no label: temporary_protection_other_places
+    required: False
+    show if: show_hidden   
+  - Location: firstParty.other_place_location
+
+  - County: firstParty.other_places_address.county
+    code : |
+        get_counties_dict()
+
+  - Street Address: firstParty.other_places_address.address
+    label above field: True
+
+  - City: firstParty.other_places_address.city
+    label above field: True
+
+  - State: firstParty.other_places_address.state
+    datatype: dropdown
+    default: NV
+    choices:
+      code: states
+    label above field: True
+
+  - Zip: firstParty.other_places_address.zip_code
+    label above field: True
+    maxlength: 5
+    minlength: 5
+    datatype: integer
+  - Give a short reason why the adverse party should not be allowed at this place: firstParty.other_places_address.causes_protect_locations
+    label above field: True    
+  - Is there another place the adverse party should stay away from? : temporary_protection.second_address_other_places
+    input type: radio
+    label above field: True
+    choices:
+      - Yes: True
+      - No: False   
+  - Location: firstParty.second_other_place_location
+    show if:
+      variable: temporary_protection.second_address_other_places
+      is: True 
+  - County: firstParty.second_other_places_address.county
+    code : |
+        get_counties_dict()
+    show if:
+      variable: temporary_protection.second_address_other_places
+      is: True 
+  - Street Address: firstParty.second_other_places_address.address
+    label above field: True
+    show if:
+      variable: temporary_protection.second_address_other_places
+      is: True 
+  - City: firstParty.second_other_places_address.city
+    label above field: True
+    show if:
+      variable: temporary_protection.second_address_other_places
+      is: True 
+  - State: firstParty.second_other_places_address.state
+    datatype: dropdown
+    default: NV
+    choices:
+      code: states
+    label above field: True
+    show if:
+      variable: temporary_protection.second_address_other_places
+      is: True 
+  - Zip: firstParty.second_other_places_address.zip_code
+    label above field: True
+    maxlength: 5
+    minlength: 5
+    datatype: integer
+    show if:
+      variable: temporary_protection.second_address_other_places
+      is: True 
+  - Give a short reason why the adverse party should not be allowed at this place.: firstParty.second_other_places_address.causes_protect_locations
+    label above field: True  
+    show if:
+      variable: temporary_protection.second_address_other_places
+      is: True                             
+section: temporary_protections_requested_nav
+---
+---
+question: Temporary Protections Requested / Other Protections
+subquestion: |
+  <div class='help'>
+    If a protection order is granted, the court will order the other person to not threaten, injure, or harass you and/or any children, family, or household members included in your request. This will also instruct them not to use someone else to threaten, injure, or harass you on their behalf.
+  </div>
+fields:
+  - no label: temporary_protection_prohibited_activities
+    required: False
+    show if: show_hidden
+  - "": temporary_protection.prohibited_activities
+    input type: hidden
+    choices:
+      - Prohibited Activities. The adverse party should not threaten, physically injure, or harass me and/or the minor child(ren), either directly or through someone acting on his/her behalf.: prohibited_activity
+    label above field: True
+    default : prohibited_activity
+section: temporary_protections_requested_nav
+---
+question: Contact with the Adverse Party
+fields:
+  - no label: temporary_protection_contact
+    required: False
+    show if: show_hidden
+  - Should the adverse party be able to contact you and/or the minor child at all? : temporary_protection.contact_with_firstparty
+    input type: radio
+    label above field: True
+    choices:
+      - No: no_contact
+      - Yes: contact_me  
+section: temporary_protections_requested_nav
+---  
+question: Temporary Protections Requested /Protection of Children
+subquestion: |
+  <div class='help'>
+    Temporary protections is what you are asking the court to order. The court has the power to require an ADVERSE PARTY to do, or not do, certain things. </div>
+fields:
+  - no label: temporary_protection_contact_children
+    required: False
+    show if: show_hidden
+  - The adverse party should : temporary_protection.contact_with_firstparty
+    input type: radio
+    choices:
+      - Not contact the minor child(ren) at all, either in person, by phone/text, email or through social media.: no_contact
+      - Contact the child(ren) by: contact_me
+    label above field: False
+    
+  - Select all that apply: temporary_protection.way_of_contact_children
+    datatype: checkboxes
+    choices:
+      - Text : text
+      - Email: mail
+      - Phone calls: phone
+      - In writing: writing
+      - Other: other
+    label above field: False
+    none of the above: False
+    show if:
+      variable: temporary_protection.contact_children
+      is: contact_me
+  - Other:  temporary_protection.other_way_of_contact_children
+    js show if :
+      val("temporary_protection.way_of_contact_children['other']") == true 
+
+section: temporary_protections_requested_nav  
+---
+question: Pets or Animals
+subquestion: |
+  <div class='help'>
+    If you have pets or animals, you can ask to have them protected as part of the protection order. </div>
+fields:
+  - no label: temporary_protection_pets
+    required: False
+    show if: show_hidden
+  - Are there pets or animals that you would like to have protected?: are_pets_to_protect
+    input type: radio
+    label above field: True    
+    choices: 
+      - Yes : True 
+      - No: False
+  - What protections would you like to request? (select all that apply): temporary_protection.pets
+    datatype: checkboxes
+    choices:
+      - The adverse party should be ordered not to threaten, injure, or harass any pets or animals that belong to me, the adverse party, and/or the child: pets_safetly
+      - I want to keep the pets / animals.: pets_possession
+    label above field: False
+    none of the above: False
+    show if : 
+      variable: are_pets_to_protect
+      is: True
+section: temporary_protections_requested_nav
+---
+question: Personal Belongings
+subquestion: |
+  <div class='help'>
+    If you or the adverse party need to pick up your belongings from each other's residence, you can ask that law enforcement be present to ensure everyone's safety. </div>
+fields:
+  - no label: temporary_protection_personal_belongings
+    required: False
+    show if: show_hidden
+  - Do you or the other party need to get your belongings from the other person's residence?: temporary_protection.get_belongings  
+    label above field: True  
+    input type: radio 
+    choices: 
+      - Yes : True 
+      - No : False 
+  - Please choose one of the following options : temporary_protection.need_to_get_belongings
+    label above field: False
+    none of the above: False  
+    datatype: checkboxes
+    choices:
+      - I need to get my belongings. I want law enforcement to come with me to the adverse party's residence so I can pick up my belongings. The address I need to go to is: me_need_belongings
+      - The other party needs to get his/her belongings. Law enforcement should come with the adverse party to my residence to pick up his/her belongings.: otherparty_need_belongings  
+    show if:
+      variable : temporary_protection.get_belongings 
+      is : True        
+section: temporary_protections_requested_nav
+---
+question: Temporary Protections Requested / Protection of Children
+subquestion: |
+  <div class='help'>
+    Temporary protections is what you are asking the court to order. The court has the power to require an ADVERSE PARTY to do, or not do, certain things. </div>
+fields:
+  - no label: temporary_protection_children
+    required: False
+    show if: show_hidden
+  - "": temporary_protection.children
+    datatype: checkboxes
+    choices:
+      - Children/Custody Orders. I want temporary custody of the child(ren). : custody
+    label above field: False
+    none of the above: False
+  - "" : temporary_protection.visitation
+    input type: radio
+    choices:
+      - The adverse party should not have visitation at this time.: this_time
+      - The adverse party should have visitation with the child(ren) as follows: as_follows
+      - We already have a custody/visitation order that we should keep following: keep_following
+    js show if :
+      val("temporary_protection.children['custody']") == true
+    label above field: False
+  - Other: firstParty.visitation_as_follows
+    show if:
+      variable: temporary_protection.visitation
+      is: as_follows 
+  - Case Number: firstParty.visitation_case_number
+    label above field: True
+    show if:
+      variable: temporary_protection.visitation
+      is: keep_following  
+  - County: firstParty.visitation_county
+    code : |
+        get_counties_dict()
+    show if:
+      variable: temporary_protection.visitation
+      is: keep_following        
+  - State: firstParty.visitation_state
+    datatype: dropdown
+    default: NV
+    choices:
+      code: states
+    label above field: True
+    show if:
+      variable: temporary_protection.visitation
+      is: keep_following          
+section: temporary_protections_requested_na
+---
+code: |
+  firstParty.schools[i].school_name
+  firstParty.schools[i].school_name
+  firstParty.schools[i].school_name
+
+  claims[i].complete = True
+---

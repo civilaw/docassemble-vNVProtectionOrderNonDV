@@ -1,0 +1,16 @@
+question: End of the Interview
+subquestion: |
+   Congratulations, you have completed all the required information to create the forms to file for a protection order.<br/>
+
+   Your forms and a step-by-step timeline will be created next. <span style="color:red"><strong>This program does not file the forms for you. You will need to save these forms and file them with the court</strong></span>.<br/>
+
+   By creating the forms, you are declaring under penalty or perjury that the information you provided is true and correct to the best of your knowledge.<br/>
+
+fields:
+  - Would you like to proceed? : exhibits.end_screen
+    input type: radio
+    choices:
+      - Yes, create my forms. I understand I must save the forms and file them at the court: True
+    label above field: True            
+continue button label: Submit
+continue button color: warning    

@@ -1,0 +1,33 @@
+question: Exhibits
+subquestion: |
+
+fields:
+  - note: |
+      You may attach documents, pictures, or anything else that you would like the judge to look at and consider when reviewing your application.
+      <div class="alert alert-danger">
+      <p><i class="fa fa-exclamation-circle" aria-hidden="true"></i> Important</p>The adverse party will be able to see all the exhibits you attach.</div> 
+ # - "": exhibits.files
+ #   required: False
+ #   datatype: files 
+ #   label above field: False
+  - Would you like to add any exhibits?: exhibits.selected
+    input type: radio
+    choices:
+      - Yes: True
+      - No: False  
+  # - Upload Multiple Files You can upload more than one file by selecting them together: exhibits.files
+  #   required: False
+  #   datatype: files 
+  #   label above field: False 
+  #   show if:
+  #     variable: exhibits.selected
+  #     is: True  
+  #{% if exhibits.files%} {% for image in exhibits.files%} {{image.show()}} {%endfor%} {%endif%} 
+  - Give a short description of what you will be attaching: exhibits.file_description
+    input type: area
+    required: True
+    label above field: True  
+    show if:
+      variable: exhibits.selected
+      is: True 
+section: exhibits_and_verification_nav

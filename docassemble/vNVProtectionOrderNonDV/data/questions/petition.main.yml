@@ -1,0 +1,455 @@
+metadata:
+  title: Protection Order Non Domestic Violence 
+  short title: PO Non DV
+---
+features:
+  small screen navigation: dropdown
+  centered: False
+  progress bar: True
+  question back button: False
+  navigation: True
+  navigation back button: False
+  navigation code button: False
+  css:
+    - main.css
+    - docassemble.NVcommon:common_fields.css
+  javascript: docassemble.NVcommon:escape.js
+---
+include:
+  - case_information.yml
+  - personal_information.yml
+  - adverse_party_information.yml
+  - adverse_party_identifiers.yml
+  - temporary_protections_requested.yml
+  - length_protection_order.yml
+  - exhibits_and_verification.yml
+  - children.yml
+  - other_cases.yml
+  - custody_claims.yml
+#  - confidentiality.yml
+  - incident_information.yml
+  - household_members.yml
+  - properties_and_debt.yml
+  - declarations.yml
+  - attachments.yml
+  - files.yml
+  - police_involvment.yml
+  - end_screen.yml
+  - utils.yml
+  - review.yml
+  - docassemble.NVcommon:common-questions.yml
+  - docassemble.NVcommon:footer.yml 
+---
+modules:
+  - docassemble.NVcommon.utils  #add module from common repository to change the county list
+---
+generic object: Individual
+objects:
+  - x.address: Address
+  - x.mailing_address: Address
+  - x.working_address: Address
+  - x.second_working_address: Address
+  - x.current_address: Address
+  - x.school_address: Address
+  - x.second_school_address: Address
+  - x.other_places_address: Address 
+  - x.second_other_places_address: Address 
+  - x.address_need_to_go: Address
+  - x.other_address: Address
+  - x.employer: Individual
+  - x.properties: DAList.using(object_type=DAObject, there_are_any=False)
+  - x.liabilities: DAList.using(object_type=DAObject, there_are_any=False)
+  - x.car: DAObject
+  - x.case: DADict
+  - x.addresses: DAList.using(object_type=Address, complete_attribute='complete')
+
+
+---
+objects:
+  - firstParty: Individual
+  - adverseParty: Individual
+  - secondadverseParty: Individual
+  - witness: Individual
+  - children: DAList.using(object_type=Individual, complete_attribute='complete')
+  - household_members: DAList.using(object_type=Individual, complete_attribute='complete')
+  - children[i].addresses: DAList.using(object_type=Address, complete_attribute='complete')
+  - children[i].currentaddresses: DAList.using(object_type=Address, complete_attribute='complete')
+  - children[i].pastaddresses: DAList.using(object_type=Address, complete_attribute='complete')
+  - children[i].claim: DAObject
+  - common_address: Address
+  - cases: DAList.using(object_type=DAObject, complete_attribute='complete')
+  - claims: DAList.using(object_type=Individual, complete_attribute='complete')
+  - child_support: DAObject
+  - child_case: DAObject
+#  - confidentiality: DAObject
+  - protection_order: DAObject
+  - protection_order.information: DAObject
+  - child_support.arreas: DAObject
+  - child_support.child_care: DAObject
+  - child_support.medical: DAObject
+  - parenting_timeshare: DAObject
+  - incident: DAObject
+  - incident.most: DAObject
+  - temporary_protection : DAObject
+  - length_protection : DAObject
+  - exhibits : DAObject
+  - incidents: DAList.using(object_type=DAObject, complete_attribute='complete')
+  - financial_information: DAObject
+  - name_change: DAObject
+  - process_timeline: DAStaticFile.using(filename='data/templates/Process-Timeline-Protection-Order.pdf')
+---
+code: |
+  need_to_regenerate = False
+  children_sections = [
+    {"children_information_nav": "Children Information"}
+    ]
+    #,
+    #{"confidentiality_nav": "Confidentiality"}
+  
+  household_sections = [
+    {"household_members_nav": "Household Members Information"}
+  ]
+  sections = [
+    {"get_started_nav": "Get started"},
+    {"case_information_nav": "Case Information"}, {"personal_information_nav": "Your personal information"},
+    {"adverse_party_information_nav": "Adverse Party Information"},{"adverse_party_identifiers_nav": "Adverse Party Identifiers"}, 
+    {"incident_information_nav": "Incident Information"},{"temporary_protections_requested_nav":"Temporary Protections Requested"},{"length_protection_order_nav":"Length of Protection Order"},{"exhibits_and_verification_nav":"Exhibits"}
+  ]
+  nav.set_sections(sections, language='en')
+  show_sections = True
+---
+code: |
+  if not defined('show_children_sections'):
+    index = 5
+    for item in children_sections:
+      sections.insert(index, item)
+      index += 1
+    nav.set_sections(sections, language='en')
+  show_children_sections = True
+--- 
+code: |
+  target = 'normal'
+  show_save_resume_message = True
+  multi_user = True 
+---
+code: |
+  if not defined('show_household_sections'):
+    index = 5
+    for item in household_sections:
+      sections.insert(index, item)
+      index += 1
+    nav.set_sections(sections, language='en')
+  show_household_sections = True
+---
+mandatory: True
+code: |
+  #needed for snapshot to send data to dashboard
+  finished = False
+  store_variables_snapshot()
+  #end dashboard code
+  first_step = False 
+  show_hidden = False
+  tax_deduction_claims = False
+  alimony_payment_party = None
+  spouse_is_parent = False
+  is_child_need_protection = False
+  county_condition = False
+  adverse_adult = False
+  who = "me"
+  address_confidential = False
+
+  show_sections
+
+  if target == 'save_and_resume':
+    if resume_by_email:
+      if email_sent:
+        log("We sent an e-mail to your e-mail address.", "info")
+      else:
+        log("There was a problem with e-mailing.", "danger")
+    elif resume_by_sms:
+      if sms_sent:
+        log("We sent a text message to your phone number.", "info")
+      else:
+        log("There was a problem with sending the text message.", "danger")
+    
+    show_save_resume_message = False
+    undefine('resume_by_email')
+    undefine('resume_by_sms')
+    undefine('email_sent')
+    undefine('sms_sent')
+    target = 'normal'
+
+  if not start:
+    exit
+  second_page
+  # firstParty
+  party = firstParty
+  spouse = adverseParty
+  second = secondadverseParty
+
+  # case information
+  if protection_order.information.who_need_protection == "my_minor_child":
+    is_child_need_protection = True
+    who = "my minor child"
+    firstParty.is_child_need_protection = True
+    show_children_sections
+  first_step = True   
+  if protection_order.information.include_household_members == True:
+    show_household_sections
+  why_need_protection
+  # Personal information
+  if  protection_order.information.age_person_seeking_protection_from == True:
+    adverseParty.age = 'adult'
+    adverse_adult = True
+    county
+  else :
+    adverseParty.age = 'minor' 
+    adverse_adult = False
+    county_minor
+    
+  if firstParty.county != 'CODE003' and firstParty.county != 'CODE016' :
+    county_condition = True
+  if not firstParty.home_phone_number:
+    firstParty.home_phone_number = ''
+  if not firstParty.cell_phone_number:
+    firstParty.cell_phone_number = '' 
+  if not firstParty.work_phone_number: 
+     firstParty.work_phone_number = ''  
+  if not firstParty.ssn:
+    firstParty.ssn = ''  
+  adverse_party_information 
+  if not adverseParty.address.zip_code:
+    adverseParty.address.zip_code = ''
+  if not adverseParty.home_phone_number:
+    adverseParty.home_phone_number = ''
+  if not adverseParty.cell_phone_number:
+    adverseParty.cell_phone_number = ''
+  if not adverseParty.ssn:
+    adverseParty.ssn = ''     
+
+  adverse_party_identifiers
+  if is_child_need_protection == True:
+    children_names = []
+    children.there_are_any = True
+    children.gather()
+    for child in children:
+       child.name.first = child.name.first.upper()
+       child.name.last = child.name.last.upper()
+       child.name.middle = child.name.middle.upper()
+       children_names.append(child.name)
+       if child.relationship_adverse_child == "parent":
+          child.relationship_adverse = "Parent"
+       elif child.relationship_adverse_child == "step_parent":
+          child.relationship_adverse = "Step Parent"       
+       elif child.relationship_adverse_child == "ex_partner":
+          child.relationship_adverse = "Ex dating partner"       
+       elif child.relationship_adverse_child == "sibling":
+          child.relationship_adverse = "Sibling"       
+       elif child.relationship_adverse_child == "other": 
+          child.relationship_adverse = child.relationship_with_advverse_party_description                    
+    children.table
+    # gather_children_currentaddresses
+    # if len(children) > 1 :
+    #   if not protection_order.information.children_at_same_address:
+    #     gather_children_addresses
+    #   children_lived_in_nevada = True
+    #   for child in children:
+    #     if child.address.state != "NV":
+    #       children_lived_in_nevada = False
+    # if cases:
+    #   parties = []
+    #   parties = [firstParty.name, adverseParty.name]
+    #   cases.there_is_another = False
+    #   cases.gather()
+
+    # if claims:
+    #   claims.there_is_another = False
+    #   claims.gather()
+
+    #firstParty.approval 
+    # if defined('child_support.paid_by'):
+    #   if child_support.paid_by == 'first_party':
+    #     child_support.paid_by = firstParty
+  
+  if protection_order.information.include_household_members == True:
+     household_members_names = []
+     household_members.there_are_any = True
+     household_members.there_is_another = False
+     household_members.gather()
+     for household_member in household_members:
+       household_members_names.append(household_member.name)
+
+  most_incident
+  past_incident
+  
+  if incidents:
+       incidents.there_is_another = False
+       incidents.gather()
+      
+  temporary_protection_prohibited_activities
+  locations
+  if locations['residence'] == True :     
+    temporary_protection_current_address
+    if temporary_protection.is_live_together == False and temporary_protection.adverse_know_current_address == False and temporary_protection.is_address_confidential == True :
+       address_confidential = True
+  if locations['work'] == True :
+    if adverseParty.work_same_with_adverse_party == True:
+      temporary_protection_work_not_confidential
+    else :
+      temporary_protection_work         
+  if locations['school'] == True :       
+    temporary_protection_school
+  if locations['other'] == True :       
+    temporary_protection_other_places
+  temporary_protection_contact
+  
+  
+
+
+  
+  temporary_protection_personal_belongings
+
+  length_protection.choices
+  #exhibits.files
+  exhibits.selected
+  exhibits.end_screen 
+
+  firstParty_name = firstParty.name.first + " " + firstParty.name.middle + " " + firstParty.name.last
+  adverseParty_name = adverseParty.name.first + " " + adverseParty.name.middle + " " + adverseParty.name.last
+  secondadverseParty_name = secondadverseParty.name.first + " " + secondadverseParty.name.middle + " " + secondadverseParty.name.last
+
+
+  documents = []
+  document_date = today(format='MM/d/YYYY')
+  if is_child_need_protection == True:
+    documents = [
+    {'name': 'Confidential Sheet', 'file': PO_confidential_info_sheet_harassment},
+    {'name': 'Justice Civil Court Cover Sheet', 'file': PO_civil_cover_sheet_justice_court_fillable},
+    {'name': 'Application', 'file': PO_stalking_harassment_child_protection_sexual_assault_application} ,
+        {'name': 'Process Timeline', 'file': 'Process-Timeline-Protection-Order.pdf'}
+    ]
+  else:
+    documents = [
+    {'name': 'Application', 'file': PO_stalking_harassment_child_protection_sexual_assault_application},
+    {'name': 'Justice Civil Court Cover Sheet', 'file': PO_civil_cover_sheet_justice_court_fillable},
+    {'name': 'Confidential Sheet', 'file': PO_confidential_info_sheet_harassment},
+        {'name': 'Process Timeline', 'file': 'Process-Timeline-Protection-Order.pdf'}
+    ]
+  # if exhibits.selected == True :
+  #     documents += [
+  #     {'name': 'Exhibits', 'file': PO_attachements}
+  #     ] 
+
+  if need_to_regenerate:
+      # if exhibits.selected == True :
+      #    del PO_attachements
+      if is_child_need_protection == True :
+        del PO_confidential_info_sheet_harassment
+        del PO_civil_cover_sheet_justice_court_fillable
+        del PO_stalking_harassment_child_protection_sexual_assault_application 
+      else :
+        del PO_stalking_harassment_child_protection_sexual_assault_application
+        del PO_civil_cover_sheet_justice_court_fillable
+        del PO_confidential_info_sheet_harassment
+      del documents_generated
+      need_to_regenerate = False  # Reset the flag
+  if documents_generated.ready():
+    #dashboard setting variable in dashboard as forms generated
+    finished = True
+    store_variables_snapshot()
+    #end dashboard code
+    documents = documents
+    attachments_screen
+    if recipient:
+          if send_forms:
+            log("We sent an e-mail to your e-mail address.", "info")
+          else:
+            log("There was a problem with e-mailing.", "danger")
+    final_screen
+  else:
+    waiting_screen   
+
+     
+---
+event: final_screen
+question: Sent
+subquestion: |
+  <div class='help'>
+     Your document(s) have been sent to : ${ recipient }.</div>  
+ 
+buttons:
+  - Exit: exit
+under: ""
+---
+code : |
+  if not adverseParty.address.zip_code:
+    adverseParty.address.zip_code = ''
+  if not adverseParty.home_phone_number:
+    adverseParty.home_phone_number = ''
+  if not adverseParty.cell_phone_number:
+    adverseParty.cell_phone_number = ''
+  if not adverseParty.mailing_address.zip_code: 
+    adverseParty.mailing_address.zip_code = ''
+  if not adverseParty.work_phone:
+    adverseParty.work_phone  = ''
+  if not adverseParty.working_address.zip_code:
+    adverseParty.working_address.zip_code = '' 
+  if not adverseParty.other_address.zip_code: 
+    adverseParty.other_address.zip_code = '' 
+---
+code: |
+  for child in children:
+      child.currentaddresses.there_are_any = True
+      child.currentaddresses.there_is_another = False
+      child.currentaddresses.gather()
+  gather_children_currentaddresses = True
+---
+code: |
+  if not protection_order.information.children_at_same_address:
+    for child in children:
+      child.pastaddresses.there_are_any = True
+      child.pastaddresses.there_is_another = False
+      child.pastaddresses.gather()
+  gather_children_pastaddresses = True
+---
+code: |
+  if not protection_order.information.children_at_same_address:
+    for child in children:
+      child.addresses.there_are_any = True
+      child.addresses.there_is_another = False
+      child.addresses.gather()
+      child.addresses.table
+  gather_children_addresses = True
+---
+code: |
+  documents = [
+  ]
+---
+imports:
+  - dateutil.relativedelta
+---
+initial: True
+code: |
+  adult_dob_max = today() - dateutil.relativedelta.relativedelta(years=18)
+  child_db_min = adult_dob_max
+  last_five_years = today() - dateutil.relativedelta.relativedelta(years=5)
+--- 
+code: |
+  target = 'normal'
+  show_save_resume_message = True
+  multi_user = True
+---
+table: household_member.table
+rows: household_members
+columns:
+  - Name: |
+      row_item.name.first
+edit:
+  - name.first
+---
+table: children.table
+rows: children
+columns: 
+  - Name: row_item.name
+edit:
+  - name.first    

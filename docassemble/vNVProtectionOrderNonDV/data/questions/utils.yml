@@ -1,0 +1,39 @@
+event: save_and_resume
+code: |
+  target = 'save_and_resume'
+---
+code: |
+  send_email(to=user_email_address, template=save_resume_template)
+  email_sent = True
+---
+code: |
+  message = f"To resume your interview, click here : {interview_url()}"
+  send_sms(to=user_phone_number, body=message)
+  sms_sent = True
+---
+question: |
+  How to resume your interview later
+subquestion: |
+  If you want to resume your interview later, we can
+  e-mail you a link that you can click on to resume
+  your interview at a later time.
+fields:
+  - Send me and email: resume_by_email
+    datatype: yesno
+  - E-mail address: user_email_address
+    datatype: email
+    show if: resume_by_email
+
+  - Send me a text message (sms): resume_by_sms
+    datatype: yesno
+  - Phone number: user_phone_number
+    show if: resume_by_sms
+under: ""
+---
+template: save_resume_template
+subject: |
+  Your interview
+content: |
+  To resume your interview, 
+  [click here](${ interview_url() }).
+---

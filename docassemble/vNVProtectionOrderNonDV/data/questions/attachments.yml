@@ -1,0 +1,29 @@
+attachment:
+    filename: ${user_info().session}-dv-confidential-information-sheet
+    docx template file: PO_confidential_info_sheet_harassment.docx
+    variable name: dv_confidential_information_sheet
+    decimal places: 2
+---
+attachment:
+  filename: ${user_info().session}-dv-confidential-information-form
+  docx template file: PO_confidential_info_sheet_harassment.docx
+  variable name: PO_confidential_info_sheet_harassment
+  decimal places: 2
+---
+attachment:
+  filename: ${user_info().session}-PO-Non-DV
+  docx template file: PO_stalking_harassment_child_protection_sexual_assault_application.docx
+  variable name: PO_stalking_harassment_child_protection_sexual_assault_application
+  decimal places: 2
+---
+attachment:
+  filename: ${user_info().session}-PO-civil-cover-sheet-justice-court-fillable
+  docx template file: PO-civil-cover-sheet-justice-court-fillable.docx
+  variable name: PO_civil_cover_sheet_justice_court_fillable
+  decimal places: 2 
+# ---
+# attachment:
+#     filename: ${user_info().session}-PO-attachements
+#     docx template file: PO_attachements.docx
+#     variable name: PO_attachements
+#     decimal places: 2

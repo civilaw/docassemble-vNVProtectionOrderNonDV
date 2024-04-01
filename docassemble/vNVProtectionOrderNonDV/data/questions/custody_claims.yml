@@ -1,0 +1,44 @@
+question: Person(s) who claim custody/visitation
+subquestion: |
+
+fields:
+  - Is there anyone oher than the parents who have custody of the children or who claim a right to custody or visitation with the children?: claims.there_are_any
+    input type: radio
+    choices:
+      - Yes: True
+      - No: False
+    label above field: True
+section: custody_and_visitation_claims_nav
+---
+question: Person(s) who claim custody/visitation
+fields:
+  - note: name ${ordinal(i)} person
+  - First name: claims[i].name.first
+  - Middle name: claims[i].name.middle
+    required: False
+  - Last name: claims[i].name.last
+  - Does this person claim custody rigths: claims[i].claims_custody
+    input type: radio
+    choices:
+      - Yes: True
+      - No: False
+  - Does this person claim visitation rigths: claims[i].visitation
+    input type: radio
+    choices:
+      - Yes: True
+      - No: False
+list collect:
+  is final: False
+  allow delete: True
+  add another label: Add more
+  label: |
+    Case ${i+1}
+section: custody_and_visitation_claims_nav
+---
+code: |
+  claims[i].name.first
+  claims[i].name.last
+  claims[i].claims_custody
+  claims[i].visitation
+  claims[i].complete = True
+---

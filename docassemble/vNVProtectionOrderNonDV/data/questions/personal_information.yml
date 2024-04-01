@@ -1,0 +1,366 @@
+question: Your Information
+subquestion: |
+fields:
+ 
+  - note: |
+      <hr> Please choose the county where you will file your application:
+  - no label: county
+    show if: show_hidden
+    required: False
+  - County: firstParty.county
+    code : |
+        get_counties_dict()
+  - note: |
+      <hr> Please choose the township where you will file your application: 
+  - Township: firstParty.township
+    datatype: dropdown
+    choices:
+      code: townships
+    js hide if: |
+        val('firstParty.county') 
+  - Township: firstParty.township
+    datatype: dropdown
+    choices:
+      code: townships_clark
+    js show if: |
+       val('firstParty.county') == 'CODE003'     
+  - Township: firstParty.township
+    datatype: dropdown
+    choices:
+      code: townships_washoe 
+    js show if: |
+       val('firstParty.county') == 'CODE016'  
+  - Township: firstParty.township
+    datatype: dropdown
+    choices:
+      code: townships_carson 
+    js show if: |
+       val('firstParty.county') == 'CODE001'
+  - Township: firstParty.township
+    datatype: dropdown
+    choices:
+      code: townships_churchill
+    js show if: |
+       val('firstParty.county') == 'CODE002' 
+  - Township: firstParty.township
+    datatype: dropdown
+    choices:
+      code: townships_douglas
+    js show if: |
+       val('firstParty.county') == 'CODE004'
+  - Township: firstParty.township
+    datatype: dropdown
+    choices:
+      code: townships_elko
+    js show if: |
+       val('firstParty.county') == 'CODE005'
+  - Township: firstParty.township
+    datatype: dropdown
+    choices:
+      code: townships_esmeralda 
+    js show if: |
+       val('firstParty.county') == 'CODE006'
+  - Township: firstParty.township
+    datatype: dropdown
+    choices:
+      code: townships_eureka
+    js show if: |
+       val('firstParty.county') == 'CODE007'    
+  - Township: firstParty.township
+    datatype: dropdown
+    choices:
+      code: townships_humboldt
+    js show if: |
+       val('firstParty.county') == 'CODE008' 
+  - Township: firstParty.township
+    datatype: dropdown
+    choices:
+      code: townships_lander
+    js show if: |
+       val('firstParty.county') == 'CODE009' 
+  - Township: firstParty.township
+    datatype: dropdown
+    choices:
+      code: townships_lincoln
+    js show if: |
+       val('firstParty.county') == 'CODE010' 
+  - Township: firstParty.township
+    datatype: dropdown
+    choices:
+      code: townships_lyon
+    js show if: |
+       val('firstParty.county') == 'CODE011' 
+  - Township: firstParty.township
+    datatype: dropdown
+    choices:
+      code: townships_mineral
+    js show if: |
+       val('firstParty.county') == 'CODE012' 
+  - Township: firstParty.township
+    datatype: dropdown
+    choices:
+      code: townships_nye
+    js show if: |
+       val('firstParty.county') == 'CODE013' 
+  - Township: firstParty.township
+    datatype: dropdown
+    choices:
+      code: townships_pershing
+    js show if: |
+       val('firstParty.county') == 'CODE014' 
+  - Township: firstParty.township
+    datatype: dropdown
+    choices:
+      code: townships_storey
+    js show if: |
+       val('firstParty.county') == 'CODE015' 
+  - Township: firstParty.township
+    datatype: dropdown
+    choices:
+      code: townships_white
+    js show if: |
+       val('firstParty.county') == 'CODE017' 
+  - note: |
+      <hr> What is your name?
+  - First name: firstParty.name.first
+  - Middle Name: firstParty.name.middle
+    required: False
+  - Last Name: firstParty.name.last
+  - note: |
+      <hr> 
+      <div class="alert alert-warning">
+      <p><i class="fa fa-exclamation-circle" aria-hidden="true"></i> Important</p>Provide your address. You will be able to mark this as a confidential address later if you do not want the person you are filing against to know where you are living.</div> 
+  - Residential Address: firstParty.address.residential_address
+    label above field: True
+  - City: firstParty.address.city
+    label above field: True
+  - State: firstParty.address.state
+    default: NV
+    datatype: dropdown
+    choices:
+      code: states
+    label above field: True
+  - Zip: firstParty.address.zip_code
+    label above field: True
+    maxlength: 5
+    minlength: 5
+    datatype: integer
+  - Is the address above the same as your mailing address?: firstParty.is_mailing_address
+    input type: radio
+    choices:
+      - Yes: True
+      - No: False
+    label above field: True
+
+  - Mailing Address: firstParty.mailing_address.address
+    label above field: True
+    show if:
+      variable: firstParty.is_mailing_address
+      is: False
+  - City: firstParty.mailing_address.city
+    label above field: True
+    show if:
+      variable: firstParty.is_mailing_address
+      is: False
+  - State: firstParty.mailing_address.state
+    default: NV
+    datatype: dropdown
+    choices:
+      code: states
+    label above field: True
+    show if:
+      variable: firstParty.is_mailing_address
+      is: False
+  - Zip: firstParty.mailing_address.zip_code
+    label above field: True
+    maxlength: 5
+    minlength: 5
+    datatype: integer
+    show if:
+      variable: firstParty.is_mailing_address
+      is: False
+  - note: |
+      <hr> 
+  - Email Address: firstParty.email
+    required: False
+  - Home Phone Number: firstParty.home_phone_number
+    required: False
+    maxlength: 11
+    minlength: 10
+    datatype: integer
+  - Cell Phone Number: firstParty.cell_phone_number
+    required: False
+    maxlength: 11
+    minlength: 10
+    datatype: integer
+  - Work Phone Number: firstParty.work_phone_number
+    required: False
+    maxlength: 11
+    minlength: 10
+    datatype: integer
+  - How to you prefer to be notified about future court dates?: firstParty.to_be_notified
+    datatype: checkboxes
+    label above field: True
+    none of the above : False
+    choices:
+      - E-mail : mail
+      - Phone: phone
+  - Social Secuity Number: firstParty.ssn
+    required: False
+    maxlength: 9
+    minlength: 9
+    datatype: integer
+  - Date of Birth: firstParty.date_of_birth
+    datatype: date
+    max: ${ adult_dob_max }
+  - Race: firstParty.race
+    datatype: dropdown
+    choices:
+      code: races
+  - Gender: firstParty.gender
+    datatype: dropdown
+    choices:
+      - M: male
+      - F: female 
+      - O: other  
+  - Do you need an interpreter?: firstParty.need_interpreter
+    input type: radio
+    choices:
+      - Yes: True
+      - No: False       
+  - What language do you speak?: firstParty.language
+    label above field: True
+    show if:
+      variable: firstParty.need_interpreter
+      is: True
+
+section: personal_information_nav
+---
+question: Your Information
+subquestion: |
+fields:
+ 
+  - note: |
+      <hr> Please choose the county where you will file your application:
+  - no label: county_minor
+    show if: show_hidden
+    required: False
+  - County: firstParty.county
+    code : |
+        get_counties_dict()
+  - note: |
+      <hr> What is your name?
+  - First name: firstParty.name.first
+  - Middle Name: firstParty.name.middle
+    required: False
+  - Last Name: firstParty.name.last
+  - note: |
+      <hr> 
+  - Residential Address: firstParty.address.residential_address
+    label above field: True
+  - City: firstParty.address.city
+    label above field: True
+  - State: firstParty.address.state
+    default: NV
+    datatype: dropdown
+    choices:
+      code: states
+    label above field: True
+  - Zip: firstParty.address.zip_code
+    label above field: True
+    maxlength: 5
+    minlength: 5
+    datatype: integer
+  - note: |
+      <div class="alert alert-warning">
+      <p><i class="fa fa-exclamation-circle" aria-hidden="true"></i> Important</p> You will be able to mark this as a confidential address later if the other party does not know where you live.</div> 
+  - Is the address above the same as your mailing address?: firstParty.is_mailing_address
+    input type: radio
+    choices:
+      - Yes: True
+      - No: False
+    label above field: True
+
+  - Mailing Address: firstParty.mailing_address.address
+    label above field: True
+    show if:
+      variable: firstParty.is_mailing_address
+      is: False
+  - City: firstParty.mailing_address.city
+    label above field: True
+    show if:
+      variable: firstParty.is_mailing_address
+      is: False
+  - State: firstParty.mailing_address.state
+    default: NV
+    datatype: dropdown
+    choices:
+      code: states
+    label above field: True
+    show if:
+      variable: firstParty.is_mailing_address
+      is: False
+  - Zip: firstParty.mailing_address.zip_code
+    label above field: True
+    maxlength: 5
+    minlength: 5
+    datatype: integer
+    show if:
+      variable: firstParty.is_mailing_address
+      is: False
+  - note: |
+      <hr> 
+  - Email Address: firstParty.email
+    required: False
+  - Home Phone Number: firstParty.home_phone_number
+    required: False
+    maxlength: 11
+    minlength: 10
+    datatype: integer
+  - Cell Phone Number: firstParty.cell_phone_number
+    required: False
+    maxlength: 11
+    minlength: 10
+    datatype: integer
+  - Work Phone Number: firstParty.work_phone_number
+    required: False
+    maxlength: 11
+    minlength: 10
+    datatype: integer
+  - How to you prefer to be notified about future court dates?: firstParty.to_be_notified
+    datatype: checkboxes
+    label above field: True
+    none of the above : False
+    choices:
+      - E-mail : mail
+      - Phone: phone
+  - Social Secuity Number: firstParty.ssn
+    required: False
+    maxlength: 9
+    minlength: 9
+    datatype: integer
+  - Date of Birth: firstParty.date_of_birth
+    datatype: date
+    max: ${ adult_dob_max }
+  - Race: firstParty.race
+    datatype: dropdown
+    choices:
+      code: races
+  - Gender: firstParty.gender
+    datatype: dropdown
+    choices:
+      - M: male
+      - F: female 
+      - O: other  
+  - Do you need an interpreter?: firstParty.need_interpreter
+    input type: radio
+    choices:
+      - Yes: True
+      - No: False       
+  - What language do you speak?: firstParty.language
+    label above field: True
+    show if:
+      variable: firstParty.need_interpreter
+      is: True
+
+section: personal_information_nav

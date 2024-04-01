@@ -1,0 +1,46 @@
+question: Length of Protection Order
+subquestion: |
+  <div class='help'>
+   <p>This application automatically asks the judge to issue up to a 45-day temporary protection order without notifying the other person first.</p>
+   <p>You can also ask for an extended order that could last for up to 2 years.</p>
+  <p>If you do, the judge will set a hearing. You and the other person will have to appear in court and explain your side before the judge can extend the protection order.</p> </div>
+fields:
+  - "": length_protection.choices
+    input type: radio
+    choices:
+      - I want an order up to 45-days only.: to_forty_five_only
+      - I want an order up to 45-days PLUS an extended order that could last up to 2 years.: to_forty_five_plus
+    label above field: False
+section: length_protection_order_nav
+
+
+--- 
+question: Length of Protection Order
+subquestion: |
+  <div class='help'>
+   This application automatically asks the judge to issue up to a 45-day temporary protection order without notifying the other person first. You will get a decision within 1 business day.
+   <br/>You can also ask for an extended order that could last for up to 2 years.
+   <br/>If you do, the judge will set a hearing. You and the other person will have to appear in court and explain your side before the judge can extend the protection order.</div>
+fields:
+  - note: |
+      <div class="alert alert-warning">
+      <p><i class="fa fa-exclamation-circle" aria-hidden="true"></i> Important</p>The extended order should require the adverse party to do the following in addition to the temporary requests I already asked for:<br/><strong>*You may have to fill out a financial form if you want the judge to grant you any kind of financial support.</strong></div>  
+  - "": length_protection.forty_five_plus
+    datatype: checkboxes
+    choices:
+      - Pay rent or mortgage payments for my place of residence.: pay_rent
+      - Pay emergency household support for me.: pay_emergency_household
+      - Pay child support for the minor child(ren) we have together.: pay_child_support
+      - Pay for lost earnings and expenses incurred as a result of my attendance at any hearing concerning this application.: pay_lost_earnings
+      - Pay any costs and fees I have spent in pursuing this case.: pay_any_costs
+      - The judge should make the following long-term arrangement for the pets/animals owned by myself, the child(ren), and/or the adverse party: long_term_arrangement_for_pets
+      - Other: other
+    label above field: False
+    none of the above: False 
+  - Describe the pets/animals involved and who should take care of the pets/animals while an extended order is in effect : length_protection.description_pets_involved
+    js show if :
+      val("length_protection.forty_five_plus['long_term_arrangement_for_pets']") == true         
+  - Describe here : length_protection.description_other
+    js show if :
+      val("length_protection.forty_five_plus['other']") == true 
+section: length_protection_order_nav

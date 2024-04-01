@@ -1,0 +1,119 @@
+question: Most Recent Incident Information
+subquestion: |
+fields:
+  - no label: most_incident
+    required: False
+    show if: show_hidden
+  - note: |
+      <div class='help'>
+       <p>Think about the most recent event or threat that is leading you to file for a protection order. The questions below ask for information about that event only.</p><p>If there were threats or abuse in the past that you want the judge to know about, you will be able to describe those later.</p>
+      </div>
+  - note: |
+      <hr> What is the approximate date of the most recent event?
+  - "": incident.date_recent_event
+    #datatype: month 
+    label above field: False
+
+  - note: |
+      <hr> Where did the most recent event happen?        
+  - City: incident.city_recent_event
+    label above field: False
+  - State: incident.state_recent_event
+    default: NV
+    datatype: dropdown
+    choices:
+      code: states
+    label above field: True
+  - Did the other party use or threaten to use a weapon?: incident.is_other_party_have_use_weapons
+    input type: radio
+    choices:
+      - Yes: True
+      - No: False  
+  - Please describe the kind of weapon used or threatened.: incident.explain_kindof_weapons
+    label above field: True
+    show if:
+      variable: incident.is_other_party_have_use_weapons
+      is: True
+  - Did the police come?: incident.did_police_come
+    input type: radio
+    choices:
+      - Yes: True
+      - No: False   
+  - Was anyone arrested?: incident.most.anyone_arrested
+    input type: radio
+    choices:
+      - Yes: True
+      - No: False         
+  - Who was arrested?: incident.most.who_arrested
+    input type: radio
+    choices:
+      - ${firstParty.name}: firstparty
+      - ${adverseParty.name}: secondparty
+      - Other: other  
+    show if:
+      variable: incident.most.anyone_arrested
+      is: True
+  - Enter the name of the person who was arrested: incident.name_who_arrested
+    label above field: True
+    show if:
+      variable: incident.most.who_arrested
+      is: other       
+  - note: | 
+      <div class="alert alert-warning">
+      <p><i class="fa fa-exclamation-circle" aria-hidden="true"></i> Important</p>
+      Explain the most recent event and describe any injuries. Give specific and detailed information about the event. If you are filing on behalf of a child, include details about what happened to the child.
+        </div>          
+  - Describe what happened: incident.description
+    input type: area
+    rows : 10 
+    label above field: True     
+  
+section: incident_information_nav
+---
+question: Past Incident Information
+subquestion: |
+  <div class='help'>
+    Think about any other times the person you want protection from threatened or abused you and/or the children. The following questions ask about any past events that may have happened.</div>
+fields:
+  - no label: past_incident
+    required: False
+    show if: show_hidden
+  - Has there been abuse or threats of violence in the past?: incidents.there_are_any
+    label above field: True
+    input type: radio
+    choices:
+      - Yes: True
+      - No: False  
+  
+section: incident_information_nav
+---
+question: Past Incident Information
+subquestion: |
+  <div class='help'>
+    Think about any other times the person you want protection from threatened or abused you and/or the children. The following questions ask about any past events that may have happened.</div>
+fields:
+  - What is the approximate date of the past incident?: incidents[i].date_incident
+    #datatype: month 
+  - Please explain what happened: incidents[i].description
+    input type: area
+    rows : 10 
+    label above field: True    
+  - note: |
+      <div class="alert alert-warning" id="alert" >
+      <p><i class="fa fa-exclamation-circle" aria-hidden="true"></i> Important</p>
+       If there are other prior incidents you want to let the judge know about, click the "Add More" button below.
+      </div> 
+list collect:
+  is final: False
+  allow delete: True
+  add another label: Add more
+  label: |
+    Incident ${i+1}
+section: incident_information_nav
+---
+code: |
+  incidents[i].description
+  incidents[i].date_incident
+  incidents[i].complete = True
+---
+

@@ -1,0 +1,193 @@
+question: Adverse Party Identifiers
+subquestion: |
+fields:
+  - no label: adverse_party_identifiers
+    show if: show_hidden
+    required: False
+  - Does the adverse party have a car?: adverseParty.is_adverse_party_has_car
+    input type: radio
+    label above field: True
+    choices:
+      - Yes: True
+      - No: False 
+  - note: |
+      <hr> Car information:   
+    show if:
+      variable: adverseParty.is_adverse_party_has_car
+      is: True 
+  - Car Make: adverseParty.car.car_make
+    required: False
+    show if:
+      variable: adverseParty.is_adverse_party_has_car
+      is: True
+  - Car Model: adverseParty.car.car_model
+    required: False
+    show if:
+      variable: adverseParty.is_adverse_party_has_car
+      is: True
+  - Car Year: adverseParty.car.year
+    datatype: integer
+    required: False
+    show if:
+      variable: adverseParty.is_adverse_party_has_car
+      is: True
+    minlength: 4
+    maxlength: 4 
+  - License Plate State: adverseParty.car.license_plate_state
+    required: False
+    show if:
+      variable: adverseParty.is_adverse_party_has_car
+      is: True
+  - License Plate Number: adverseParty.car.license_plate_number
+    required: False
+    show if:
+      variable: adverseParty.is_adverse_party_has_car
+      is: True  
+  - Does the Adverse Party have any scars, marks, or tattoos?: adverseParty.is_adverse_party_has_any_marks
+    input type: radio
+    label above field: True
+    choices:
+      - Yes: True
+      - No: False 
+  - Please provide desrciption and where they are located: adverseParty.description_tattoos
+    label above field: True
+    required: False
+    show if:
+      variable: adverseParty.is_adverse_party_has_any_marks
+      is: True  
+  - Does adverse party speak English?: adverseParty.is_speak_english
+    input type: radio
+    label above field: True
+    choices:
+      - Yes: True
+      - No: False       
+  - What language does the adverse party speak?: adverseParty.language
+    label above field: True
+    show if:
+      variable: adverseParty.is_speak_english
+      is: False 
+  - Do you have children with adverse party?: adverseParty.have_child_with_adverse_party
+    input type: radio
+    label above field: True
+    choices:
+      - Yes: True
+      - No: False  
+  - Have you ever lived with adverse party?: adverseParty.have_lived_with_adverse_party
+    input type: radio
+    label above field: True
+    choices:
+      - Yes: True
+      - No: False          
+  - Do you work for the for the same employer?: adverseParty.work_same_with_adverse_party
+    input type: radio
+    label above field: True
+    choices:
+      - Yes: True
+      - No: False 
+  - Is the adverse party likely to avoid service?: adverseParty.is_adverse_party_avoid_service
+    input type: radio
+    label above field: True
+    choices:
+      - Yes: True
+      - No: False 
+      - I don't know: unknown  
+  - Does the adverse party have a history of violent behavior or crimes?: adverseParty.has_adverse_party_violent_or_crimes
+    input type: radio
+    label above field: True
+    choices:
+      - Yes: True
+      - No: False  
+      - I don't know: unknown  
+  - Please explain: adverseParty.explain_adverse_party_violent_or_crimes
+    label above field: True
+    show if:
+      variable: adverseParty.has_adverse_party_violent_or_crimes
+      is: True   
+  - Is the adverse party likely to act violent when served?: adverseParty.is_adverse_party_act_violent_whene_served
+    input type: radio
+    label above field: True
+    choices:
+      - Yes: True
+      - No: False   
+      - I don't know: unknown  
+  - Does the adverse party own a gun/firearm or have a gun/firearm in his/her possession or control ? : adverseParty.is_adverse_party_have_relation_a_gun_firearm
+    input type: radio
+    label above field: True
+    choices:
+      - Yes: True
+      - No: False
+      - I don't know: unknown  
+  - note: |
+      <div class="alert alert-warning">
+      <p><i class="fa fa-exclamation-circle" aria-hidden="true"></i> Important</p>If you request an extended order, there will be a hearing where the judge may order the other person to surrender, sell, or transfer any firearm, and may prohibit the other person from having a gun. If the other person needs a gun for work, he / she may be allowed to possess a firearm while on duty. This will be discussed at the hearing for an extended order.      </div>  
+    show if:
+      variable: adverseParty.is_adverse_party_have_relation_a_gun_firearm
+      is: True  
+  - Does the adverse party have access to weapons?: adverseParty.is_have_access_weapons
+    input type: radio
+    label above field: True
+    choices:
+      - Yes: True
+      - No: False 
+      - I don't know: unknown  
+  #  default: True  
+    #show if:
+     # variable: adverseParty.is_adverse_party_have_relation_a_gun_firearm
+    #  is: True  
+  - Please describe type and location of weapons: adverseParty.explain_adverse_party_have_access_weapons
+    label above field: True
+    show if:
+      variable: adverseParty.is_have_access_weapons
+      is: True  
+  - Does the adverse party have a concealed carry weapons permit ?: adverseParty.is_have_concealed_carry_weapons_permit
+    input type: radio
+    label above field: True
+    choices:
+      - Yes: True
+      - No: False 
+      - I don't know: unknown       
+   # default: True    
+   # show if:
+   #   variable: adverseParty.is_adverse_party_have_relation_a_gun_firearm
+    #  is: True          
+
+  - Are there any current or prior cases that involve you and the adverse party in any court?: protection_order.information.have_you_prior_cases_involve_you_any_court
+    input type: radio
+    label above field: True
+    choices:
+      - Yes: True
+      - No: False  
+  - Parties involved: adverseParty.case.partie_involved
+    required: False
+    show if:
+      variable: protection_order.information.have_you_prior_cases_involve_you_any_court
+      is: True
+  - Case number: adverseParty.case.case_number
+    required: False   
+    show if:
+      variable: protection_order.information.have_you_prior_cases_involve_you_any_court
+      is: True
+  - Case type: adverseParty.case.case_type
+    required: False
+    show if:
+      variable: protection_order.information.have_you_prior_cases_involve_you_any_court
+      is: True
+  - Court name: adverseParty.case.court_name
+    required: False
+    show if:
+      variable: protection_order.information.have_you_prior_cases_involve_you_any_court
+      is: True 
+  - State: adverseParty.case.state
+    default: NV
+    datatype: dropdown
+    choices:
+      code: states
+    label above field: True
+    show if:
+      variable: protection_order.information.have_you_prior_cases_involve_you_any_court
+      is: True  
+  - Order date: adverseParty.case.order_date
+    show if:
+      variable: protection_order.information.have_you_prior_cases_involve_you_any_court
+      is: True                                                                                             
+section: adverse_party_identifiers_nav

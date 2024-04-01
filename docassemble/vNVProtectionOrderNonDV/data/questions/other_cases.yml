@@ -1,0 +1,120 @@
+question: Other Cases
+subquestion: |
+  <div class='help'>
+    The judge needs to know about any cases involving the adverse party, you, and/or the minor child(ren). This will help
+    the judge make their decision.
+  </div>
+fields:
+  - no label: cases.there_are_any
+    show if: show_hidden
+    required: False
+  - note: |
+      Have either of you ever participated in any case concerning these children as a party, witness, or in some other capacity
+  - Department of Family Services (DFS) or Child Protective Service (CPS)has been involved with my family : dfs_or_cps_has_involved
+    datatype: yesno
+  - When: whene_dfs_or_cps_has_involved
+    datatype: date
+    show if: 
+      variable: dfs_or_cps_has_involved
+      is: True
+  - Caseworker’s name: caseworker_name
+    show if: 
+      variable: dfs_or_cps_has_involved
+      is: True
+  - I have a on-going Custody Case: custody_case
+    datatype: yesno
+  - Case number: case_number
+    show if: 
+      variable: custody_case
+      is: True
+  - City or County filed in: case_city
+    show if: 
+      variable: custody_case
+      is: True
+  - State: case_state
+    default: NV
+    datatype: dropdown
+    choices:
+      code: states
+    show if: 
+      variable: custody_case
+      is: True  
+    
+  - I participated in other cases concerning the child(ren): participad_in_other_cases_concern_child
+    datatype: yesno
+  - Case number: child_case.number
+    required: False   
+    show if:
+      variable: participad_in_other_cases_concern_child
+      is: True
+  - Case type: child_case.type
+    required: False
+    show if:
+      variable: participad_in_other_cases_concern_child
+      is: True
+  - Court name: child_case.court_name
+    required: False
+    show if:
+      variable: participad_in_other_cases_concern_child
+      is: True 
+  - State: child_case.state
+    default: NV
+    datatype: dropdown
+    choices:
+      code: states
+    label above field: True
+    show if:
+      variable: participad_in_other_cases_concern_child
+      is: True  
+  - Order date: child_case.order_date
+    datatype: date 
+    show if:
+      variable: participad_in_other_cases_concern_child
+      is: True   
+
+  - I know of other cases that could affect this case such as other custody cases, protection order cases, or adoptions/terminations : other_cases
+    datatype: yesno
+  - Parties involved: other_case_partie_involved
+    required: False
+    show if:
+      variable: other_cases
+      is: True
+  - Case number: other_case_number
+    required: False   
+    show if:
+      variable: other_cases
+      is: True
+  - Case type: other_case_type
+    required: False
+    show if:
+      variable: other_cases
+      is: True
+  - Court name: other_case_court_name
+    required: False
+    show if:
+      variable: other_cases
+      is: True 
+  - State: other_case_state
+    default: NV
+    datatype: dropdown
+    choices:
+      code: states
+    label above field: True
+    show if:
+      variable: other_cases
+      is: True  
+  - Order date: other_case_order_date
+    datatype: date 
+    show if:
+      variable: other_cases
+      is: True 
+     
+section: other_cases_nav
+---
+code: |
+  cases[i].case_type
+  cases[i].parties
+  cases[i].city
+  cases[i].number
+  cases[i].complete = True
+---

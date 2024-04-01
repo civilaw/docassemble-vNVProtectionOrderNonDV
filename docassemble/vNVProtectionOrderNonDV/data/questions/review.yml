@@ -1,0 +1,53 @@
+event: set_flag_before_review
+code: |
+  need_to_regenerate = True
+  review_answers
+---  
+event: review_answers
+need: household_members.table
+question: |
+  Revisit questions
+subquestion: |
+  % if first_step:
+    These are the questions you have
+    answered so far.  Click to revisit.
+  % endif
+review:
+  - Case Information: protection_order.information.who_need_protection
+  - Personal Information: firstParty.county
+  - Adverse Party Information: adverse_party_information
+  - Adverse Party Identifiers: adverse_party_identifiers
+  - note: |
+      <a  class = "da-review-action" id="review_link" href="${ url_action('review_interview') }">Household Members Information</a>
+    show if: household_members.there_are_any      
+  - label: Incidents Information 
+    fields:
+       - most_incident
+       - past_incident
+  - Temporary Protections Requested / Other Protections: temporary_protection_prohibited_activities
+  - Temporary Protections Requested / Protected Locations: locations 
+  - Contact with the Adverse Party: temporary_protection_contact
+  - Temporary Protections Requested / Pets or Animals: temporary_protection_pets
+  - Temporary Protections Requested / Personal Belongings: temporary_protection_personal_belongings  
+  - Length of Protection Order Information: length_protection.choices
+  - Exhibits Information : exhibits.selected
+  - End of the interview: exhibits.end_screen
+---
+table: household_members.table
+rows: household_members
+columns:
+  - Name: |
+      row_item.name.full()
+edit:
+  - name.first
+---  
+event: review_interview
+question: |
+  Edit your answers
+review:
+  - note: |
+      % if household_members.there_are_any:
+        ${ household_members.table }
+      % endif  
+
+   

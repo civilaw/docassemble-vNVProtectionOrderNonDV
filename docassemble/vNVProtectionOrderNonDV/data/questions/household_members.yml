@@ -1,0 +1,33 @@
+question: Household Members Information
+subquestion: |
+  <div class='help'>
+  You indicated there are other family or household members you want protected. Give their details below. </div>
+fields:
+  #- note: Information about the ${ordinal(i)} household member who needs protection
+  - note: Household Member information
+  - First name: household_members[i].name.first
+  - Middle name: household_members[i].name.middle
+    required: False
+  - Last name: household_members[i].name.last
+  - Date of birth: household_members[i].dob
+    datatype: date
+    max: ${ today()}
+  - Relationship to you: household_members[i].relation_firstparty
+  - Relationship to Adverse Party: household_members[i].relation_adverseparty
+
+
+list collect:
+  is final: False
+  allow delete: True
+  add another label: Add more
+  label: |
+    Household Members ${i+1}
+section: household_members_nav
+---
+code: |
+  household_members[i].name
+  household_members[i].dob
+  household_members[i].relation_firstparty
+  household_members[i].relation_adverseparty
+  household_members[i].complete = True
+---

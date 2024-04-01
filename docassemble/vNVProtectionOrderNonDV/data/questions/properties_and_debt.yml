@@ -1,0 +1,53 @@
+question: Division of Community Properties & Debts
+subquestion: |
+  <div class='help'>
+    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer consequat lacus in sapien tristique laoreet. Proin
+    aliquam odio tristique tristique luctus. Donec tincidunt arcu ullamcorper leo tristique bibendum. Nulla vehicula felis
+    vitae augue finibus feugiat.
+  </div>
+fields:
+  - Both spouses have agreed to divide the community property as follow: property_division_agreement
+    input type: radio
+    choices:
+      - There is no community property to divide.: nothing
+      - Any community property has already been divided.: already_divided
+      - The community property should be divided between both spouses: both_spouses
+    label above field: True
+section: debts_nav
+---
+generic object: Individual
+question: ${x} will receive the following property
+fields:
+  - Description of the property: x.properties[i].description
+  - Percentage to receive: x.properties[i].percentage
+list collect:
+  is final: False
+  allow delete: True
+  add another label: Add more
+  label: |
+    Property ${i+1}
+section: debts_nav
+---
+question: Community debts
+fields:
+  - Both spouses have agreed to divide the community debt as follow: debt_division_agreement
+    input type: radio
+    choices:
+      - There is no community debt to divide.: nothing
+      - Any community debt has already been divided.: already_divided
+      - The community deb should be divided between both spouses: both_spouses
+    label above field: True
+section: debts_nav
+---
+generic object: Individual
+question: ${x} will liable for the following liability
+fields:
+  - Description of the liability: x.liabilities[i].description
+list collect:
+  is final: False
+  allow delete: True
+  add another label: Add more
+  label: |
+    Liability ${i+1}
+section: debts_nav
+---

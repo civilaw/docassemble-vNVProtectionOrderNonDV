@@ -1,0 +1,94 @@
+id: tab
+table: documents_table
+rows: documents
+columns:
+  - Name: |
+      row_item['name']
+  - Download: |
+      '[Download PDF](' + row_item['file'].pdf.url_for() + ')' if row_item.get('file') and row_item['name'] != 'Process Timeline'  else  '[Download PDF](' +  url_of('data/static/Process-Timeline-Protection-Order.pdf')  +')' if row_item['name'] == 'Process Timeline'  else '[FILE docassemble.NVcommon:data/static/loading.gif]'
+---
+id: tab2
+table: documents_table_waiting
+rows: documents
+columns:
+  - Name: |
+      row_item['name']
+  - Download: |
+      '[FILE docassemble.NVcommon:data/static/loading.gif]'
+---
+code: |
+  documents_generated = background_action('generate_documents')
+  
+---
+event: generate_documents
+code: |
+  documents = [
+    {'name': 'Application', 'file': PO_stalking_harassment_child_protection_sexual_assault_application},
+    {'name': 'JUSTICE CIVIL COURT COVER SHEET', 'file': PO_civil_cover_sheet_justice_court_fillable},
+    {'name': 'Confidential Sheet', 'file': PO_confidential_info_sheet_harassment}
+  ]
+  background_response_action('background_task_success', documents=documents)
+---
+event: waiting_screen
+question: |
+  Keep this screen open. We are creating your documents.
+subquestion: |
+    ${ documents_table_waiting }
+under: ""
+reload: True
+---
+event: background_task_success
+code: |
+  documents = action_argument('documents')
+  background_response(documents)
+---
+question:  Your documents are ready.
+subquestion: |
+  ${ documents_table }
+fields:
+  - no label: attachments_screen
+    required: False
+    show if: show_hidden
+  - E-mail address: recipient
+    datatype: email   
+under: ""
+prevent going back: False
+continue button label: Send
+action buttons:
+  - label: Review answers
+    action: set_flag_before_review
+    css class:  resume2
+    color: info
+    new window: True
+---
+code: |
+  attachments = []
+  if is_child_need_protection == True:
+    attachments = [PO_confidential_info_sheet_harassment,PO_civil_cover_sheet_justice_court_fillable,PO_stalking_harassment_child_protection_sexual_assault_application,process_timeline]
+  else:
+    attachments = [PO_stalking_harassment_child_protection_sexual_assault_application,PO_civil_cover_sheet_justice_court_fillable,PO_confidential_info_sheet_harassment,process_timeline]
+  # if exhibits.selected == True :
+  #     attachments += [PO_attachements] 
+  send_forms = send_email(to=[recipient], template=forms_template, attachments=attachments)
+---
+template: forms_template
+subject: Your Application for Protection 
+content: |
+  <p>Congratulations, you have completed all the forms to file for a Protection Order.  Your forms and a process timeline are attached to this email.  </p>
+  <p><strong>The forms have not been filed with the court.</strong>  You will need to print them and take them to the court when you are ready to file. </p>
+  <p>The next steps you need to take are:</p>
+    <ol>
+        <li>If you have any documents you want the judge to consider (for example, texts, pictures, emails, etc.), print them out and attach them to the end of the application. </li>
+        <li>Locate the <a href="https://nvcourts.gov/find_a_court/justice_courts">Justice Court</a> where you will file your documents . </li>
+        <li>File the documents. There is no fee to file these documents.</li>
+        <li>The judge will review your application after you file it.   The judge could issue a protection order, deny your request, or could set a hearing to ask you some questions if the judge needs more information. </li>
+    </ol> 
+  <p>If a protection order is granted, the court will use the information you provided to have the Sheriff serve the other person.  Your order will be valid for up to 45 days.  If you asked for a longer order, there will probably be a court hearing for both of you to attend so the judge can decide whether to extend the order longer.  </p> 
+  <p>If you are in danger, call 911.  </p>
+  <p>There are many resources that may be able to help you.  You can find out how to get an advocate, legal help, and/or emergency shelter on the <a href="https://selfhelp.nvcourts.gov/self-help/getting-started/community-resources/domestic-violence">State of Nevada Resources Page.</a> </p>
+---
+event: debug
+question: debug
+subquestion: |
+  ${ action_argument('file') }
+---

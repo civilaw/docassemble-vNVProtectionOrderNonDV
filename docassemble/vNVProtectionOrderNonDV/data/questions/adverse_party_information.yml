@@ -1,0 +1,268 @@
+question: Adverse Party Information
+subquestion: |
+fields:
+  - no label: adverse_party_information
+    show if: show_hidden
+    required: False
+  - note: |
+      <div class='alert alert-warning'>
+      <p><i class="fa fa-exclamation-circle" aria-hidden="true"></i> Important</p>
+       The person you are filing against is called the "adverse party." </br>Provide as much information as you can about the adverse party below. </br>If a protection order is granted, the Sheriff will attempt to serve the adverse party with the order and will need this information to locate and serve them.
+      </div>   
+  - note: |
+      <hr> Adverse party’s name?
+  - First name: adverseParty.name.first
+  - Middle Name: adverseParty.name.middle
+    required: False
+  - Last Name: adverseParty.name.last
+  - note: |
+     <strong>If the adverse party uses another name, enter it below.</strong>
+  - First name: secondadverseParty.name.first
+    required: False
+  - Middle Name: secondadverseParty.name.middle
+    required: False
+  - Last Name: secondadverseParty.name.last
+    required: False  
+  - Residential Address: adverseParty.address.residential_address
+    label above field: True
+    required: False 
+  - City: adverseParty.address.city
+    label above field: True
+    required: False 
+  - State: adverseParty.address.state
+    datatype: dropdown
+    choices:
+      code: states
+    label above field: True
+    required: False 
+  - Zip: adverseParty.address.zip_code
+    label above field: True
+    required: False 
+    maxlength: 5
+    minlength: 5
+    datatype: integer
+  - Is this address hard to find?: adverseParty.address.is_hard_to_find_address
+    input type: radio
+    required: False
+    choices:
+      - Yes: True
+      - No: False
+  - Please explain: adverseParty.address.explain_hard_address
+    label above field: True
+    required: False
+    show if:
+      variable: adverseParty.address.is_hard_to_find_address
+      is: True   
+  - Is the address above the same as the mailing address?: adverseParty.is_mailing_address_for_adverse_party
+    input type: radio
+    required: False    
+    choices:
+      - Yes: True
+      - No: False
+    label above field: True
+
+  - Mailing Address: adverseParty.mailing_address.address
+    label above field: True
+    required: False    
+    show if:
+      variable: adverseParty.is_mailing_address_for_adverse_party
+      is: False
+  - City: adverseParty.mailing_address.city
+    label above field: True
+    required: False    
+    show if:
+      variable: adverseParty.is_mailing_address_for_adverse_party
+      is: False
+  - State: adverseParty.mailing_address.state
+    default: NV
+    datatype: dropdown
+    required: False    
+    choices:
+      code: states
+    label above field: True
+    show if:
+      variable: adverseParty.is_mailing_address_for_adverse_party
+      is: False
+  - Zip: adverseParty.mailing_address.zip_code
+    label above field: True
+    required: False    
+    maxlength: 5
+    minlength: 5
+    datatype: integer
+    show if:
+      variable: adverseParty.is_mailing_address_for_adverse_party
+      is: False
+  - note: |
+      <hr>  
+  - Is the adverse party working?: adverseParty.is_adverse_party_working
+    input type: radio
+    required: False    
+    choices:
+      - Yes: True
+      - No: False
+      - I don't know: unknown       
+    label above field: True
+  - Employer: adverseParty.employer
+    required: False 
+    show if:
+      variable: adverseParty.is_adverse_party_working
+      is: True
+  - Position: adverseParty.position
+    required: False  
+    show if:
+      variable: adverseParty.is_adverse_party_working
+      is: True
+  - Work Phone Number: adverseParty.work_phone
+    required: False
+    maxlength: 11
+    minlength: 10
+    datatype: integer
+    show if:
+      variable: adverseParty.is_adverse_party_working
+      is: True
+  - Work days: adverseParty.work_days
+    required: False
+    show if:
+      variable: adverseParty.is_adverse_party_working
+      is: True
+  - Work hours: adverseParty.work_hours
+    required: False  
+    show if:
+      variable: adverseParty.is_adverse_party_working
+      is: True   
+  - Address: adverseParty.working_address.address
+    required: False
+    label above field: True
+    show if:
+      variable: adverseParty.is_adverse_party_working
+      is: True
+  - City: adverseParty.working_address.city
+    required: False
+    label above field: True
+    show if:
+      variable: adverseParty.is_adverse_party_working
+      is: True
+  - State: adverseParty.working_address.state
+    default: NV
+    required: False
+    datatype: dropdown
+    choices:
+      code: states
+    label above field: True
+    show if:
+      variable: adverseParty.is_adverse_party_working
+      is: True
+  - Zip: adverseParty.working_address.zip_code
+    required: False
+    label above field: True
+    maxlength: 5
+    minlength: 5
+    datatype: integer
+    show if:
+      variable: adverseParty.is_adverse_party_working
+      is: True  
+  - Is there another address where the adverse party might be found?: adverseParty.is_adverse_party_other_addresses
+    required: False
+    input type: radio
+    choices:
+      - Yes: True
+      - No: False
+    label above field: True
+
+
+  - Address: adverseParty.other_address.address
+    required: False
+    label above field: True
+    show if:
+      variable: adverseParty.is_adverse_party_other_addresses
+      is: True
+  - City: adverseParty.other_address.city
+    required: False
+    label above field: True
+    show if:
+      variable: adverseParty.is_adverse_party_other_addresses
+      is: True
+  - State: adverseParty.other_address.state
+    default: NV
+    required: False
+    datatype: dropdown
+    choices:
+      code: states
+    label above field: True
+    show if:
+      variable: adverseParty.is_adverse_party_other_addresses
+      is: True
+  - Zip: adverseParty.other_address.zip_code
+    required: False
+    label above field: True
+    maxlength: 5
+    minlength: 5
+    datatype: integer
+    show if:
+      variable: adverseParty.is_adverse_party_other_addresses
+      is: True  
+  - note: |
+      <hr>     
+  - Email Address: adverseParty.email
+    required: False
+  - Home Phone Number: adverseParty.home_phone_number
+    required: False
+    maxlength: 11
+    minlength: 10
+    datatype: integer
+  - Cell Phone Number: adverseParty.cell_phone_number
+    required: False
+    maxlength: 11
+    minlength: 10
+    datatype: integer
+  - The adverse party's height: adverseParty.height
+    required: False
+    #datatype: number
+  - The adverse party's weight: adverseParty.weight
+    required: False
+    #datatype: number
+  - The adverse party's eye color: adverseParty.eye_color
+    required: False
+  - The adverse party's hair color: adverseParty.hair_color
+    required: False
+  - Social Secuity Number: adverseParty.ssn
+    required: False
+    maxlength: 9
+    minlength: 9
+    datatype: integer
+  - Date of Birth: adverseParty.date_of_birth
+    required: False
+    datatype: date
+    max: ${ adult_dob_max }
+    show if: 
+      code: adverse_adult
+  - Date of Birth: adverseParty.date_of_birth
+    required: False
+    datatype: date
+    min: ${ child_db_min }
+    show if: 
+      code: not adverse_adult       
+  - Race: adverseParty.race
+    datatype: dropdown
+    choices:
+      code: races
+  - Gender: adverseParty.gender
+    datatype: dropdown
+    choices:
+      - M: male
+      - F: female  
+      - O: other  
+  - Is the adverse party in jail?: adverseParty.is_in_jail
+    required: true
+    input type: radio
+    choices:
+      - Yes: True
+      - No: False       
+  - Where?: adverseParty.jail_name
+    required: False
+    label above field: True
+    show if:
+      variable: adverseParty.is_in_jail
+      is: True                           
+section: adverse_party_information_nav
+---

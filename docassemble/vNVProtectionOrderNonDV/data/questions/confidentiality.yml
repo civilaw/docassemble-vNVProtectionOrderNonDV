@@ -1,0 +1,19 @@
+question: Confidentiality
+subquestion: |
+fields:
+  - no label: firstParty.approval
+    show if: show_hidden
+    required: False
+  - Would your health/safety/liberty or the child’s health/safety/liberty be in danger if the information in this document is released to the adverse party?: confidentiality.health_or_safety_be_in_danger
+    input type: radio
+    choices:
+      - Yes. This document should be sealed pursuant to NRS 125 A.385(5): True
+      - No. This document may be provided to the adverse party: False
+  - note: |
+      <div class='help'>
+         Note. the court may release this information to the other party after a hearing if the court orders the disclosure.      </div>
+
+
+section: confidentiality_nav
+---
+

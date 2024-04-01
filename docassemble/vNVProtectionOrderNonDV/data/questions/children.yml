@@ -1,0 +1,321 @@
+question: Children Information
+subquestion: |
+fields:
+  - note: Information about the ${ordinal(i)} child who needs protection
+  - note: Child name
+  - First name: children[i].name.first
+  - Middle name: children[i].name.middle
+    required: False
+  - Last name: children[i].name.last
+  - Date of birth: children[i].dob
+    datatype: date
+    min: ${ child_db_min }
+    max: ${ today() }
+  - Gender: children[i].gender
+    datatype: dropdown
+    choices:
+      - M: male
+      - F: female
+      - O: other
+  - Social Security No.: children[i].ssn
+    required: False
+  - Race: children[i].race
+    datatype: dropdown
+    choices:
+      code: races
+  - ${adverseParty.name} is this child's: children[i].relationship_adverse_child
+    input type: radio
+    choices:
+      - Parent: parent
+      - Step parent: step_parent
+      - Ex dating partner : ex_partner
+      - Sibling : sibling 
+      - Other: other
+  - Enter their relationship: children[i].relationship_with_advverse_party_description
+    required: False
+    js show if: |
+      val('children[i].relationship_adverse_child') == "other" 
+      
+      
+      
+      
+      
+      
+      
+ # - What is the State of Residency of the child?: children[i].address.state
+ #   default: NV
+ #   datatype: dropdown
+ #   choices:
+ #     code: states
+ #   label above field: True
+ # - When did the child start living here?: children[i].start_living_address
+ #   datatype: month   
+ # - note: |
+ #     <div class='help'>
+ #       If Nevada is not the “home state” of the child(ren), the court may not be able to enter custody orders.
+ #     </div>  
+ #   js show if: |
+ #     val("children[i].address.state") != 'NV' &&  val("children[i].address.state") != ''
+ # - Who does the child live with?: children[i].live_with
+ #   input type: radio
+ #   choices:
+ #     - Me: me
+ #     - Someone else: someone_else
+ # - Enter their name: children[i].live_with_name
+ #   js show if: |
+  #    val('children[i].live_with') == "someone_else"     
+section: children_information_nav
+---
+question: Children Custody
+fields:
+  - note: |
+      <h3>Legal Custody of the Children</h3>
+      <div class='help'>
+        Legal custody refers to the ability to make major decisions about the child, such as medical care,
+        education, and religious upbringing.
+      </div>
+  - You both agree that: legal_custody
+    input type: radio
+    choices:
+      - Both parents should share joint legal custody of the children: both_parent
+      - Sole legal custody of the children should be granted to ${firstParty}: first_party
+      - Sole legal custody of the children should be granted to ${adverseParty}: second_party
+      - Nevada is not the "home state" of the children and the Court generally cannot enter custody orders: nevada_not_home_state
+    label above field: True
+  - note: |
+      <h3>Physical Custody of the Children</h3>
+      <div class='help'>
+        Physical custody refers to the amount of time the child spends with each parent. Each parent must have
+        the child(ren) at least 40% of the time, or 146 days per year
+      </div>
+  - You both agree that: physical_custody
+    input type: radio
+    choices:
+      - Both parents should share joint physical custody of the children: both_parent
+      - The primary physical custody of the children should be granted to ${firstParty}: first_party
+      - The primary physical custody of the children should be granted to ${adverseParty}: second_party
+      - Nevada is not the "home state" of children and the Court generally cannot enter custody orders: nevada_not_home_state
+    label above field: True
+section: children_information_nav
+---
+question: Do you wish to add more children?
+yesno: children.there_is_another
+section: children_information_nav
+---
+code: |
+  children[i].name
+  children[i].dob
+  children[i].gender
+  children[i].ssn
+  children[i].race
+  children[i].relationship_adverse_child
+  children[i].complete = True
+---  
+code: |
+  children[i].currentaddresses[j].city
+  children[i].currentaddresses[j].state
+  children[i].currentaddresses[j].address
+  children[i].currentaddresses[j].zip_code
+  children[i].currentaddresses[j].complete = True
+  children[i].currentaddresses[j].lived_in_other_address
+---
+code: |
+  children[i].addresses[j].from_date
+  children[i].addresses[j].to_date
+  children[i].addresses[j].city
+  children[i].addresses[j].state
+  children[i].addresses[j].live_with
+  children[i].addresses[j].complete = True
+---
+question: Children Residency
+subquestion: |
+fields:
+  - What is the current address of the ${ordinal(i)} child?: children[i].currentaddresses[j].address
+    label above field: True
+  - City: children[i].currentaddresses[j].city
+    label above field: True
+  - State: children[i].currentaddresses[j].state
+    datatype: dropdown
+    default: NV
+    choices:
+      code: states
+    label above field: True
+  - Zip: children[i].currentaddresses[j].zip_code
+    label above field: True
+    maxlength: 5
+    minlength: 5
+    datatype: integer
+     
+  - Has the child lived at any other address(es) in the past 5 years?: children[i].currentaddresses[j].lived_in_other_address
+    input type: radio
+    choices:
+      - Yes: True
+      - No: False 
+  - Past Address of child: children[i].pastaddresses[j].address
+    label above field: True
+    show if:
+      variable: children[i].currentaddresses[j].lived_in_other_address
+      is: True
+  - City: children[i].pastaddresses[j].city
+    label above field: True
+    show if:
+      variable: children[i].currentaddresses[j].lived_in_other_address
+      is: True
+  - State: children[i].pastaddresses[j].state
+    datatype: dropdown
+    default: NV
+    choices:
+      code: states
+    label above field: True
+    show if:
+      variable: children[i].currentaddresses[j].lived_in_other_address
+      is: True
+  - Zip: children[i].pastaddresses[j].zip_code
+    label above field: True
+    maxlength: 5
+    minlength: 5
+    datatype: integer 
+    show if:
+      variable: children[i].currentaddresses[j].lived_in_other_address
+      is: True       
+section: children_residency_nav
+---
+question: Children Residency
+subquestion: |
+fields:
+  - Have all the minor children lived together in the same place for the last five years?: protection_order.information.children_at_same_address
+    input type: radio
+    choices:
+      - Yes: True
+      - No: False
+  - note: What’s the address where the children have lived during the last 5 years?
+    show if: protection_order.information.children_at_same_address
+  - From: common_address.from_date
+    datatype: date
+    show if: protection_order.information.children_at_same_address
+
+  - To: common_address.to_date
+    datatype: date
+    show if: protection_order.information.children_at_same_address
+
+  - City: common_address.city
+    show if: protection_order.information.children_at_same_address
+
+  - State: common_address.state
+    default: NV
+    datatype: dropdown
+    choices:
+      code:
+        states
+    show if: protection_order.information.children_at_same_address
+     
+  - Did the children live with a parent during this period?: children_lived_with_a_parent
+    input type: radio
+    choices:
+      - Yes: True
+      - No: False
+    show if: protection_order.information.children_at_same_address
+   
+  - Name of the Person the child(ren) lived with: name_of_parent
+    show if:
+      variable: children_lived_with_a_parent
+      is: False 
+  - Current address of the person: guardian_current_address
+    show if:
+      variable: children_lived_with_a_parent
+      is: False
+section: children_residency_nav
+---
+question: Where has child been living?
+fields:
+  - From: children.addresses.from_date
+    datatype: date
+  - To: children.addresses.to_date
+    datatype: date
+  - City: children.addresses.city
+  - State: children.addresses.state
+    default: NV
+    datatype: dropdown
+    choices:
+      code:
+        states
+  - Did the children live with a parent during this period?: children.addresses.lived_with_a_parent
+    input type: radio
+    choices:
+      - Yes: True
+      - No: False
+  - Name of the Person the child(ren) lived with: children.addresses.name_of_parent
+    show if:
+      variable: children.addresses.lived_with_a_parent
+      is: False 
+  - Current address of the person: children.addresses.guardian_current_address
+    show if:
+      variable: children.addresses.lived_with_a_parent
+      is: False
+list collect:
+  is final: False
+  allow delete: True
+  add another label: Add more
+  label: |
+    Address ${i+1}
+section: children_residency_nav
+---
+if: |
+  protection_order.information.children_at_same_address == False
+question: Where has ${ordinal(i)} child been living?
+fields:
+  - From: children[i].addresses[j].from_date
+    datatype: date
+  - To: children[i].addresses[j].to_date
+    datatype: date
+  - City: children[i].addresses[j].city
+  - State: children[i].addresses[j].state
+    default: NV
+    datatype: dropdown
+    choices:
+      code:
+        states
+  - Who does the child live with?: children[i].addresses[j].live_with
+    input type: radio
+    choices:
+      - Me: me
+      - Someone else: someone_else
+  - Enter their name: children[i].addresses[j].live_with_name
+    js show if: |
+      val('children[i].addresses[j].live_with') == "someone_else"   
+  - Current address of the person: children[i].addresses[j].guardian_current_address
+    js show if: |
+      val('children[i].addresses[j].live_with') == "someone_else"    
+list collect:
+  is final: False
+  allow delete: True
+  add another label: Add more
+  label: |
+    Address ${i+1}
+section: children_residency
+---
+question: |
+  Summary of all addresses you added for all children
+subquestion: |
+
+  % for p in children:
+    ${p.name}'s addresses
+    ${p.addresses.table}
+    ${p.addresses.add_action()}
+
+  % endfor
+field: children_addresses
+section: children_residency
+---
+generic object: Individual
+table: x.addresses.table
+rows: x.addresses
+columns:
+  - City: row_item.city
+  - From: row_item.from_date
+    datatype: date
+  - Until: row_item.to_date
+    datatype: date
+edit:
+  - city
+

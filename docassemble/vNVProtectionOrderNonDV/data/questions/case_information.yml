@@ -1,0 +1,117 @@
+question: Protection Order Against Stalking, Harassment, and/or Sexual Assault
+subquestion: |
+  <div class='help'>
+  <p> The purpose of a protection order is to keep a person away from you for safety reasons. It can order a person to stay away from your home, work, school, or other places you visit regularly. A temporary protection order (“TPO”) may be issued for up to 45 days without notifying the other party first. You can also request an extended protection order that could last up to 2 years.<p> 
+  <p> There is no fee to file for a protection order.<p> 
+    <a href="https://selfhelp.nvcourts.gov/self-help/other-topics/temporary-protection-orders" class="btn btn-outline-secondary learn"">Learn more</a>
+    <a href="https://selfhelpguides.nvcourts.gov/app/start/ProtectionOrderEligibility/" class="btn  btn-primary1 learn check">Check your eligibility</a>
+  </div>
+continue button field: start
+under: ""
+section: get_started_nav
+---
+question: Protection Order Against Stalking, Harassment, and/or Sexual Assault
+subquestion: |
+  <div class='help'> 
+  <p>If you are not sure whether you should file for a TPO, or if you are in fear for your safety during the process, you may want to talk to an advocate about your options and a safety plan. <a target="_blank" href="https://www.ncedsv.org/find-help/" class="link_css">Find a local advocacy organization </a>that might be able to help.<br/> </p>
+  <p>This interview will ask all the questions needed to create an application for a protection order. <strong>The interview will not file the forms for you, you will need to print/save them and file them at your local court.</strong></p>
+  <p>If you would like to begin the process, click ‘continue’ below.<p>
+
+  </div>
+fields:
+  - no label: second_page
+    required: False
+    show if: show_hidden     
+section: get_started_nav
+---
+question: Protection Order Against Stalking, Harassment, and/or Sexual Assault
+fields:
+  - Who is the <strong>main person</strong> that needs protection (you can request to add other family our household members if needed below)?: protection_order.information.who_need_protection
+    input type: radio
+    label above field: True
+    choices:
+      - Me: me
+      - My minor child(ren): my_minor_child
+  - note: |
+      <div class="alert alert-warning" id="alert" >
+      <p><i class="fa fa-exclamation-circle" aria-hidden="true"></i> Important</p>
+      You can ask to include other family or household members in your application if you are concerned for their safety. This could include your spouse, a relative, or someone who lives with you.
+      </div> 
+  - Are there other family or household members who also need protection? : protection_order.information.include_household_members
+    input type: radio
+    label above field: True
+    choices:
+      - Yes: True
+      - No: False
+        
+  - How are you related to the minor child(ren)?: protection_order.information.related_to_minor
+    input type: radio
+    label above field: True
+    choices:
+      - I’m the parent: parent
+      - I’m the legal guardian: legal_guardian
+    js show if: |
+      val('protection_order.information.who_need_protection') == "my_minor_child"
+  - note: |
+      <div class="alert alert-warning" id="alert" >
+      <p><i class="fa fa-exclamation-circle" aria-hidden="true"></i> Important</p>
+      You must be the parent or guardian of the adverse party’s child to apply for a protection order on behalf of the minor child(ren)
+      </div> 
+    js show if: |
+      val('related_to_minor') == "other" 
+  - How do you (or the minor child) know the person you want protection from?: protection_order.information.relation_with_who_want_protection
+    datatype: checkboxes
+    label above field: True
+    none of the above : False
+    choices:
+      - We are related by blood or marriage : related_by_blood_or_marriage
+      - We are or used to be friends/acquaintances : friends
+      - We are neighbors or reside in the same neighborhood : neighbors 
+      - We are or were co-workers : co_workers
+      - Other: other  
+  - Please explain: protection_order.information.explain_related_by_blood
+    js show if: |
+      val("protection_order.information.relation_with_who_want_protection['related_by_blood_or_marriage']") == true
+  - Specify your relationship with the adverse party: protection_order.information.relationship_with_advverse_party
+    js show if: |
+      val("protection_order.information.relation_with_who_want_protection['other']") == true
+  - Is the person you are seeking protection from 18 years old or older?: protection_order.information.age_person_seeking_protection_from
+    input type: radio
+    label above field: True
+    choices:
+     - Yes - 18 or older : True 
+     - No - under 18: False      
+section: case_information_nav
+
+---
+question: Protection Order Against Stalking, Harassment, and/or Sexual Assault
+fields:
+  - no label: why_need_protection
+    required: False
+    show if: show_hidden
+  - Why do you need protection?: protection_order.information.why_need_protection
+    #input type: radio
+    datatype: checkboxes
+    label above field: True
+    none of the above: False
+    choices:
+      - The adverse party is stalking ${who}: aggravated_stalking
+        help: |
+          Stalking is when a person engages in a course of conduct that reasonably causes you to feel frightened, intimidated, harassed, or in fear of your immediate safety. The conduct can also be directed towards a family or household member. 
+          Aggravated Stalking: A person who commits the crime of stalking and in conjunction therewith threatens the person with the intent to cause the person to be placed in reasonable fear of death or substantial bodily. NRS 200.575(2) 
+      - The adverse party is harassing ${who}: harassment
+        help: |
+          Harassment occurs when someone threatens to harm you in the future and you reasonably believe the threat will be carried out. The threat may be to cause physical harm or property damage, either to you or a member of your family or household. 
+      - The adverse party committed a sexual assault against ${who}: sexual_assault
+        help: |
+          Sexual assault is sexual penetration without consent and against the will of the victim. If criminal charges are pending, a protection order against sexual assault may be issued through the criminal court. If there is not a criminal case, a protection order can be requested in Justice Court.  
+      - The adverse party is an adult who physically, mentally, or sexually injured the minor child: protection_on_behalf_of_minor_child
+        help: |
+          The parent or guardian of a child may petition any court of competent jurisdiction on behalf of the child for a temporary or extended order against a person who is 18 years of age or older and who the parent or guardian reasonably believes has committed or is committing a crime involving: (a) Physical or mental injury to the child of a nonaccidental nature; or (b) Sexual abuse or sexual exploitation of the child. NRS 33.400
+  - note: |
+      <div class="alert alert-warning" id="alert" >
+      <p><i class="fa fa-exclamation-circle" aria-hidden="true"></i> Important</p>
+        As you complete the application, please keep in mind that you are filling in the questions as they pertain to the actions/incident committed upon the child.      </div> 
+    js show if: |
+      val("protection_order.information.why_need_protection") == 'protection_on_behalf_of_minor_child' 
+section: case_information_nav
